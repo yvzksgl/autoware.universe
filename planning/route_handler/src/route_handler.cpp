@@ -583,14 +583,7 @@ bool RouteHandler::getFollowingShoulderLanelet(
   back_pose.position.z = 0;
 
   for (const auto & shoulder_lanelet : shoulder_lanelets_) {
-    Pose front_pose;
-    front_pose.position.x = shoulder_lanelet.centerline2d().front().x();
-    front_pose.position.y = shoulder_lanelet.centerline2d().front().y();
-    front_pose.position.z = 0;
-    if (
-      std::hypot(
-        front_pose.position.x - back_pose.position.x,
-        front_pose.position.y - back_pose.position.y) < 5) {
+    if (lanelet::geometry::follows(lanelet, shoulder_lanelet)) {
       *following_lanelet = shoulder_lanelet;
       return true;
     }
@@ -631,14 +624,7 @@ bool RouteHandler::getPreviousShoulderLanelet(
   front_pose.position.z = 0;
 
   for (const auto & shoulder_lanelet : shoulder_lanelets_) {
-    Pose back_pose;
-    back_pose.position.x = shoulder_lanelet.centerline2d().back().x();
-    back_pose.position.y = shoulder_lanelet.centerline2d().back().y();
-    back_pose.position.z = 0;
-    if (
-      std::hypot(
-        front_pose.position.x - back_pose.position.x,
-        front_pose.position.y - back_pose.position.y) < 5) {
+    if (lanelet::geometry::follows(shoulder_lanelet, lanelet)) {
       *prev_lanelet = shoulder_lanelet;
       return true;
     }
